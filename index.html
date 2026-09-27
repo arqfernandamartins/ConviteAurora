@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Você está convidado! Aurora faz 4 anos</title>
+<meta name="description" content="03/11 às 19h. Toque para confirmar presença e ver o local da festa.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Aniversário da Aurora">
+<meta property="og:title" content="🌺 Você está convidado! Aurora faz 4 anos">
+<meta property="og:description" content="03/11 às 19h. Toque para confirmar presença e ver o local da festa.">
+<meta property="og:url" content="https://convite-aurora.vercel.app/">
+<meta property="og:image" content="https://convite-aurora.vercel.app/og.jpg">
+<meta property="og:image:secure_url" content="https://convite-aurora.vercel.app/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Aurora faz 4 anos! Terça, 03/11 às 19h">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="🌺 Você está convidado! Aurora faz 4 anos">
+<meta name="twitter:description" content="03/11 às 19h. Toque para confirmar presença e ver o local da festa.">
+<meta name="twitter:image" content="https://convite-aurora.vercel.app/og.jpg">
+<link rel="icon" href="icone.png">
+<link rel="apple-touch-icon" href="icone.png">
+<meta name="theme-color" content="#0F6F93">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap">
+<link rel="preload" as="video" href="convite.mp4" type="video/mp4">
+<style>
+  :root{
+    --tab:#1992BD; --tab-dark:#0F6F93; --pink:#E23D78; --pink-dark:#B82358;
+    --sand:#FFF8EA; --ink:#173B4A; --ink-soft:#557482; --gold:#FFC857;
+    --font:"Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;height:100%;background:#0B4E6B}
+  body{font-family:var(--font);color:var(--ink);-webkit-text-size-adjust:100%;overflow:hidden}
+
+  /* fundo: o próprio convite desfocado, preenchendo a tela */
+  .backdrop{position:fixed;inset:-40px;background:url(capa.jpg) center/cover;filter:blur(28px) saturate(1.15);transform:scale(1.1)}
+  .backdrop::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(8,60,85,.15), rgba(6,40,60,.55))}
+
+  .stage{position:fixed;inset:0;display:grid;place-items:center;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+  /* celular: ocupa a largura toda; computador: centralizado com a altura da tela */
+  .card{position:relative;width:min(100vw, calc(100dvh * .5625));aspect-ratio:1080/1920;container-type:inline-size;overflow:hidden;
+    background:#EAF7F8 url(capa.jpg) center/cover}
+  .card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  @media (min-width:600px){
+    .card{width:min(92vw, calc((100dvh - 48px) * .5625));border-radius:22px;box-shadow:0 30px 70px rgba(0,25,40,.5), 0 0 0 1px rgba(255,255,255,.15)}
+  }
+
+  .tab{position:absolute;left:46.85%;right:0;border:0;cursor:pointer;background:var(--tab);color:#fff;
+    border-radius:3.2cqw 0 0 3.2cqw;display:flex;align-items:center;gap:3cqw;padding-inline:4.5cqw 3cqw;
+    font:700 5.1cqw/1.1 var(--font);text-align:left;transition:background .15s}
+  .tab.t1{top:81.35%;height:7.08%}
+  .tab.t2{top:90.83%;height:7.03%}
+  .tab svg{width:7.6cqw;height:7.6cqw;flex:none}
+  .tab .arrow{margin-left:auto;width:4.6cqw;height:4.6cqw;opacity:.85}
+  .tab:hover{background:#1587B0}
+  .tab:active{background:var(--tab-dark)}
+  .tab:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+
+  /* som */
+  .sound{position:fixed;z-index:5;top:calc(12px + env(safe-area-inset-top,0px));right:12px;display:inline-flex;align-items:center;gap:8px;
+    min-height:44px;padding:8px 16px 8px 12px;border:0;border-radius:99px;cursor:pointer;font:700 14px var(--font);color:#fff;
+    background:rgba(8,55,78,.78);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  .sound svg{width:20px;height:20px}
+  .sound .on{display:none}
+  .sound[aria-pressed="true"] .on{display:block}
+  .sound[aria-pressed="true"] .off{display:none}
+  .sound[aria-pressed="true"]{padding:8px 12px}
+  .sound[aria-pressed="true"] span{display:none}
+  .sound[aria-pressed="false"]{animation:nudge 2.4s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+  .sound:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  @media (min-width:600px){ .sound{top:24px;right:24px} }
+
+  /* ===== janelas ===== */
+  .overlay{position:fixed;inset:0;z-index:20;background:rgba(4,40,58,.6);display:flex;align-items:flex-end;justify-content:center;
+    padding-inline:12px;opacity:0;transition:opacity .25s}
+  .overlay.show{opacity:1}
+  .sheet{width:min(100%, 520px);max-height:calc(100% - 24px);overflow:auto;background:var(--sand);border-radius:24px 24px 0 0;
+    border-top:7px solid var(--tab);padding:22px 22px calc(22px + env(safe-area-inset-bottom,0px));transform:translateY(40px);transition:transform .3s}
+  .overlay.show .sheet{transform:none}
+  .sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .sheet h2{margin:0;font-weight:800;color:var(--tab);font-size:26px;line-height:1.15}
+  .sheet .sub{margin:6px 0 0;color:var(--ink-soft);font-size:15px}
+  .close{flex:none;width:44px;height:44px;border-radius:50%;border:0;background:#EFE4CC;color:var(--ink);cursor:pointer;display:grid;place-items:center}
+  .close svg{width:20px;height:20px}
+  .close:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .lbl{display:block;margin-top:18px;font-weight:700;font-size:15px}
+  .sheet input{margin-top:8px;width:100%;min-height:52px;border-radius:14px;border:2px solid var(--tab);background:#fff;
+    padding:12px 14px;font:600 16px var(--font);color:var(--ink)}
+  .sheet input:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+  .err{margin:8px 0 0;color:var(--pink-dark);font-weight:700;font-size:14px}
+  .ctr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid #EADBBE}
+  .ctr:last-of-type{border-bottom:0}
+  .ctr b{display:block;font-size:17px}
+  .ctr span.age{display:block;color:var(--ink-soft);font-size:13px;font-weight:500}
+  .stp{display:flex;align-items:center;gap:10px}
+  .stp button{width:46px;height:46px;border-radius:50%;border:2px solid var(--tab);background:#fff;color:var(--tab);
+    font:700 22px/1 var(--font);cursor:pointer;display:grid;place-items:center}
+  .stp button:disabled{opacity:.35;cursor:default}
+  .stp button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .stp output{min-width:30px;text-align:center;font:800 24px var(--font);color:var(--ink);font-variant-numeric:tabular-nums}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;margin-top:16px;border-radius:14px;border:0;cursor:pointer;
+    font:800 17px var(--font);color:#fff;background:var(--pink);box-shadow:0 5px 0 var(--pink-dark);text-decoration:none;text-align:center;padding:10px}
+  .btn svg{width:22px;height:22px}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--pink-dark)}
+  .btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+  .btn.blue{background:var(--tab);box-shadow:0 5px 0 var(--tab-dark)}
+  .btn.dark{background:#0B3A4C;box-shadow:0 5px 0 #03202B}
+  .note{margin:12px 0 0;text-align:center;color:var(--ink-soft);font-size:13px;font-weight:500}
+  .linkish{display:block;text-align:center;margin:12px auto 0;background:none;border:0;color:var(--ink-soft);font:700 14px var(--font);text-decoration:underline;cursor:pointer;padding:6px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .two .btn{margin-top:0}
+  .place{margin-top:16px;border-radius:16px;background:#DDF2F7;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:16px}
+  .place svg{width:50px;height:50px}
+  .place b{display:block;font-size:17px}
+  .place span{display:block;color:var(--ink-soft);font-size:14px;line-height:1.4;font-weight:500}
+  .date{margin:14px 0 16px;font:700 17px var(--font);color:var(--ink)}
+  .copy-addr{display:block;margin:12px auto 0;background:none;border:0;color:var(--tab-dark);font:700 14px var(--font);cursor:pointer;padding:6px}
+  @media (min-width:700px){
+    .overlay{align-items:center}
+    .sheet{border-radius:24px;border-top-width:7px;max-height:calc(100% - 48px)}
+  }
+  @media (prefers-reduced-motion: reduce){ .overlay,.sheet{transition:none} .sound{animation:none!important} }
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+
+<button type="button" class="sound" id="sound" aria-pressed="false" aria-label="Ativar ou desligar o som">
+  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+  <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+  <span id="sound-txt">Ativar o som</span>
+</button>
+
+<main class="stage">
+  <div class="card">
+    <video id="vid" src="convite.mp4" poster="capa.jpg" autoplay muted loop playsinline preload="auto" aria-label="Convite animado do aniversário de 4 anos da Aurora, dia 03/11, terça-feira, às 19h"></video>
+    <button type="button" class="tab t1" id="open-rsvp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
+      Confirmar presença
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <button type="button" class="tab t2" id="open-map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg>
+      Local da festa
+      <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</main>
+
+<!-- ===== Confirmar presença ===== -->
+<div class="overlay" id="rsvp" hidden role="dialog" aria-modal="true" aria-labelledby="rsvp-t">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div><h2 id="rsvp-t">Confirmar presença</h2><p class="sub">Informe quantas pessoas vão comparecer. Confirme até 25/10.</p></div>
+      <button type="button" class="close" data-close aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <label class="lbl" for="nome">Seu nome</label>
+    <input id="nome" type="text" autocomplete="name" placeholder="Ex.: Família Silva">
+    <p class="err" id="err" hidden>Escreva seu nome para a gente saber quem está confirmando.</p>
+    <div style="margin-top:4px">
+      <div class="ctr"><div><b>Adultos</b><span class="age">A partir de 18 anos</span></div>
+        <div class="stp"><button type="button" data-k="adultos" data-d="-1" aria-label="Menos um adulto">−</button><output id="o-adultos">1</output><button type="button" data-k="adultos" data-d="1" aria-label="Mais um adulto">+</button></div></div>
+      <div class="ctr"><div><b>Adolescentes</b><span class="age">De 12 a 17 anos</span></div>
+        <div class="stp"><button type="button" data-k="adolescentes" data-d="-1" aria-label="Menos um adolescente">−</button><output id="o-adolescentes">0</output><button type="button" data-k="adolescentes" data-d="1" aria-label="Mais um adolescente">+</button></div></div>
+      <div class="ctr"><div><b>Crianças</b><span class="age">Até 11 anos</span></div>
+        <div class="stp"><button type="button" data-k="criancas" data-d="-1" aria-label="Menos uma criança">−</button><output id="o-criancas">0</output><button type="button" data-k="criancas" data-d="1" aria-label="Mais uma criança">+</button></div></div>
+    </div>
+    <a class="btn" id="wa" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.1z"/></svg>
+      <span id="wa-txt">Confirmar pelo WhatsApp</span></a>
+    <p class="note">Abre o WhatsApp com a mensagem pronta. É só tocar em enviar.</p>
+    <button type="button" class="linkish" id="nao">Não poderei ir</button>
+  </div>
+</div>
+
+<!-- ===== Local da festa ===== -->
+<div class="overlay" id="mapa" hidden role="dialog" aria-modal="true" aria-labelledby="mapa-t">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div><h2 id="mapa-t">Local da festa</h2><p class="sub">Toque em um app para traçar a rota.</p></div>
+      <button type="button" class="close" data-close aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="place">
+      <svg viewBox="0 0 48 48" fill="none" stroke="#E23D78" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 44s-13-12-13-23a13 13 0 0 1 26 0c0 11-13 23-13 23z" fill="#FDE0EA"/><circle cx="24" cy="21" r="5"/></svg>
+      <div><b>NC Festas</b><span id="addr">Av. Dona Lavínia Brasil Grossi, 322 – Morada do Sol, Três Corações – MG</span></div>
+    </div>
+    <p class="date">Terça-feira, 03/11 às 19h</p>
+    <div class="two">
+      <a class="btn blue" target="_blank" rel="noopener" href="https://maps.app.goo.gl/pNpMgbNYW2pQgAf79">Google Maps</a>
+      <a class="btn dark" target="_blank" rel="noopener" href="https://waze.com/ul?ll=-21.666417%2C-45.282531&amp;navigate=yes">Waze</a>
+    </div>
+    <button type="button" class="copy-addr" id="copy-addr">Copiar endereço</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const WHATSAPP = "5535984453684";
+  const $ = id => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ===== Vídeo e som ===== */
+  const vid = $("vid"), sBtn = $("sound"), sTxt = $("sound-txt");
+  let touched = false;
+  const tryPlay = () => { const p = vid.play(); if (p && p.catch) p.catch(() => {}); };
+  tryPlay();
+  function setSound(on){
+    vid.muted = !on; if (on) tryPlay();
+    sBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    sTxt.textContent = on ? "Som ligado" : "Ativar o som";
+  }
+  sBtn.addEventListener("click", e => { e.stopPropagation(); touched = true; setSound(vid.muted); });
+  // o som liga no primeiro toque no convite
+  document.addEventListener("pointerdown", e => {
+    if (touched || e.target.closest("#sound")) return;
+    touched = true; setSound(true);
+  }, {capture:true});
+
+  /* ===== Janelas ===== */
+  let lastFocus = null;
+  function openSheet(id){
+    const o = $(id); lastFocus = document.activeElement; o.hidden = false;
+    requestAnimationFrame(() => o.classList.add("show"));
+    setTimeout(() => (o.querySelector("input") || o.querySelector(".close")).focus(), 60);
+  }
+  function closeSheet(o){ o.classList.remove("show"); setTimeout(() => { o.hidden = true; lastFocus && lastFocus.focus(); }, reduce ? 0 : 250); }
+  $("open-rsvp").addEventListener("click", () => openSheet("rsvp"));
+  $("open-map").addEventListener("click", () => openSheet("mapa"));
+  document.querySelectorAll(".overlay").forEach(o => o.addEventListener("click", e => { if (e.target === o || e.target.closest("[data-close]")) closeSheet(o); }));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".overlay:not([hidden])").forEach(closeSheet); });
+
+  /* ===== Confirmação ===== */
+  const counts = {adultos:1, adolescentes:0, criancas:0};
+  const nome = $("nome"), wa = $("wa"), err = $("err");
+  const plural = n => n === 1 ? "pessoa" : "pessoas";
+  const total = () => counts.adultos + counts.adolescentes + counts.criancas;
+  const msgYes = () => `Olá! Confirmação para o aniversário de 4 anos da Aurora (03/11, 19h)\n\nNome: ${nome.value.trim()}\nAdultos: ${counts.adultos}\nAdolescentes: ${counts.adolescentes}\nCrianças: ${counts.criancas}\nTotal: ${total()} ${plural(total())}`;
+  const msgNo = () => `Olá! Aqui é ${nome.value.trim()}. Infelizmente não poderei ir ao aniversário de 4 anos da Aurora (03/11). Mandamos um beijo para ela!`;
+  const waLink = txt => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
+  const nao = $("nao");
+  nao.outerHTML = `<a class="linkish" id="nao" href="#" target="_blank" rel="noopener">Não poderei ir</a>`;
+  const naoA = $("nao");
+  function render(){
+    for (const k in counts){ $("o-" + k).textContent = counts[k]; document.querySelector(`[data-k="${k}"][data-d="-1"]`).disabled = counts[k] <= 0; }
+    wa.href = waLink(msgYes()); naoA.href = waLink(msgNo());
+    $("wa-txt").textContent = `Confirmar presença (${total()})`;
+  }
+  document.querySelectorAll(".stp button").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.k; counts[k] = Math.max(0, Math.min(20, counts[k] + Number(b.dataset.d))); render();
+  }));
+  nome.addEventListener("input", () => { if (nome.value.trim()) err.hidden = true; render(); });
+  [wa, naoA].forEach(a => a.addEventListener("click", e => { if (!nome.value.trim()){ e.preventDefault(); err.hidden = false; nome.focus(); } }));
+  $("copy-addr").addEventListener("click", async () => {
+    const b = $("copy-addr");
+    try { await navigator.clipboard.writeText($("addr").textContent); b.textContent = "Endereço copiado"; }
+    catch { const r = document.createRange(); r.selectNodeContents($("addr")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Endereço selecionado"; }
+    setTimeout(() => b.textContent = "Copiar endereço", 2500);
+  });
+  render();
+})();
+</script>
+</body>
+</html>
