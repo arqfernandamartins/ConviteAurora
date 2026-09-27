@@ -133,15 +133,11 @@
 <body>
 <div class="backdrop" aria-hidden="true"></div>
 
-<button type="button" class="sound" id="sound" aria-pressed="false" aria-label="Ativar ou desligar o som">
-  <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
-  <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
-  <span id="sound-txt">Ativar o som</span>
-</button>
+
 
 <main class="stage">
   <div class="card">
-    <video id="vid" src="convite.mp4" poster="capa.jpg" autoplay muted loop playsinline preload="auto" aria-label="Convite animado do aniversário de 4 anos da Aurora, dia 03/11, terça-feira, às 19h"></video>
+    <video id="vid" src="convite.mp4" poster="capa.jpg" autoplay muted loop disablepictureinpicture playsinline preload="auto" aria-label="Convite animado do aniversário de 4 anos da Aurora, dia 03/11, terça-feira, às 19h"></video>
     <button type="button" class="tab t1" id="open-rsvp">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
       Confirmar presença
@@ -207,22 +203,12 @@
   const $ = id => document.getElementById(id);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ===== Vídeo e som ===== */
-  const vid = $("vid"), sBtn = $("sound"), sTxt = $("sound-txt");
-  let touched = false;
+  /* ===== Vídeo (sem som) ===== */
+  const vid = $("vid");
   const tryPlay = () => { const p = vid.play(); if (p && p.catch) p.catch(() => {}); };
   tryPlay();
-  function setSound(on){
-    vid.muted = !on; if (on) tryPlay();
-    sBtn.setAttribute("aria-pressed", on ? "true" : "false");
-    sTxt.textContent = on ? "Som ligado" : "Ativar o som";
-  }
-  sBtn.addEventListener("click", e => { e.stopPropagation(); touched = true; setSound(vid.muted); });
-  // o som liga no primeiro toque no convite
-  document.addEventListener("pointerdown", e => {
-    if (touched || e.target.closest("#sound")) return;
-    touched = true; setSound(true);
-  }, {capture:true});
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) tryPlay(); });
+  document.addEventListener("pointerdown", tryPlay, {once:true});
 
   /* ===== Janelas ===== */
   let lastFocus = null;
